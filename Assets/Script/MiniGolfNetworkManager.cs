@@ -32,7 +32,6 @@ public class MiniGolfNetworkManager : NetworkManager
         _gameController = Instantiate(GameControllerPrefab);
         DontDestroyOnLoad(_gameController);
         NetworkServer.Spawn(_gameController.gameObject);
-
         ServerListService.PostServer(this);
     }
 
@@ -42,4 +41,5 @@ public class MiniGolfNetworkManager : NetworkManager
 
         ServerListService.DeleteServer();
     }
+
 }

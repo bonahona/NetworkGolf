@@ -6,32 +6,33 @@ using UnityEngine;
 public class MiniGolfPlayerController : NetworkBehaviour
 {
     public bool HazControl;
+    public int StrikesLeft = 0;
     public Rigidbody Ball;
     public float ImpulseMultiplier;
+    public float SqrSlowDownVeloccity;
     public Material ActiveMaterial;
     public Material InactiveMaterial;
     public Renderer Renderer;
 
     [ClientRpc]
-	public void CanHazControl()
+    public void CanHazControl()
     {
         HazControl = isLocalPlayer;
+        StrikesLeft = 1;
         CameraDotLookAtThis();
         SetActiveColorOrOutlineOrWhatEver();
         PlayActivationAnimation();
     }
 
+    [ClientRpc]
     public void GiefBackControl()
     {
-        HazControl = false;
         SetInActiveColorOrOutlineOrWhatEver();
-        TellSrvYouAreDone();
     }
 
     [Command]
     public void TellSrvYouAreDone()
-	{
-
+    {
         MiniGolfGameController.Instance.PlayerPlayed(netId);
     }
 
@@ -48,7 +49,7 @@ public class MiniGolfPlayerController : NetworkBehaviour
     }
 
     void SetActiveColorOrOutlineOrWhatEver()
-	{
+    {
         //todo;
         Renderer.material = ActiveMaterial;
 
@@ -56,25 +57,40 @@ public class MiniGolfPlayerController : NetworkBehaviour
 
     void PlayActivationAnimation()
     {
-        Ball.AddForce(Vector3.up * .5f, ForceMode.VelocityChange);
+    }
+
+    private void FixedUpdate()
+    {
+        var sqrVelo = Ball.velocity.sqrMagnitude;
+        if (sqrVelo < SqrSlowDownVeloccity)
+        {
+            Ball.AddForce((-Ball.velocity / Mathf.Max(Ball.velocity.magnitude, 1)) * Time.deltaTime * 100);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
         if (!HazControl)
-		{
-            return;
-		}
-
-        if (Input.GetMouseButton(0))
-		{
-            DrawPlayerArrowUI();
-        }
-        if (Input.GetMouseButtonUp(0))
         {
-            ApplyForce();
+            return;
+        }
+        if (StrikesLeft > 0)
+        {
+            if (Input.GetMouseButton(0))
+            {
+                DrawPlayerArrowUI();
+            }
+            if (Input.GetMouseButtonUp(0))
+            {
+                ApplyForce();
+            }
+        }
+        else if (Ball.velocity.sqrMagnitude < 0.2f)
+        {
+            HazControl = false;
             GiefBackControl();
+            TellSrvYouAreDone();
         }
     }
 
@@ -84,11 +100,11 @@ public class MiniGolfPlayerController : NetworkBehaviour
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         float intersectionDistance;
         if (plane.Raycast(ray, out intersectionDistance))
-		{
+        {
             return ray.GetPoint(intersectionDistance);
-		}
+        }
         return Vector3.zero;
-	}
+    }
 
     void DrawPlayerArrowUI()
     {
@@ -97,10 +113,9 @@ public class MiniGolfPlayerController : NetworkBehaviour
     }
 
     void ApplyForce()
-	{
+    {
+        StrikesLeft -= 1;
         var direction = Ball.transform.position - GetMouseOffset();
         Ball.AddForce(direction * ImpulseMultiplier, ForceMode.VelocityChange);
-	}
-
-
+    }
 }
