@@ -5,8 +5,6 @@ using Mirror;
 
 public class MiniGolfNetworkManager : NetworkManager
 {
-    public const string DefaultServerName = "A Server";
-
     [Header("Canvas UI")]
 
     [Tooltip("Assign Main Panel so it can be turned on from Player:OnStartClient")]

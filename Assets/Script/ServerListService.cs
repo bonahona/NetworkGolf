@@ -46,7 +46,8 @@ public class ServerListService
         try {
             var result = httpClient.GetAsync(ServerListUrl).ConfigureAwait(false).GetAwaiter().GetResult();
             return JsonConvert.DeserializeObject<List<UnityServer>>(result.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult());
-        }catch(Exception e) {
+            Debug.Log($"Http GET {ServerListUrl}");
+        } catch(Exception e) {
             Debug.LogWarning($"Failed to parse server listing: {e.Message}");
             return new List<UnityServer>();
         }
@@ -67,6 +68,7 @@ public class ServerListService
 
         try {
             MyServer = JsonConvert.DeserializeObject<UnityServer>(result.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult());
+            Debug.Log($"Http POST {ServerListUrl}");
         } catch (Exception e) {
             Debug.LogWarning($"Failed to parse server response: {e.Message}");
         }
@@ -83,5 +85,7 @@ public class ServerListService
 
         ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
         var result = httpClient.DeleteAsync($"{ServerListUrl}{server.Id}").ConfigureAwait(false).GetAwaiter().GetResult();
+
+        Debug.Log($"Http DELETE {ServerListUrl}");
     }
 }
