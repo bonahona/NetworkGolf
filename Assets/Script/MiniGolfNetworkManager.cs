@@ -35,7 +35,7 @@ public class MiniGolfNetworkManager : NetworkManager
         DontDestroyOnLoad(_gameController);
         NetworkServer.Spawn(_gameController.gameObject);
 
-        ServerListService.PostServer();
+        ServerListService.PostServer(this);
     }
 
     public override void OnStopServer()

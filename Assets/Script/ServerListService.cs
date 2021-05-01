@@ -1,3 +1,5 @@
+using kcp2k;
+using Mirror;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -50,7 +52,7 @@ public class ServerListService
         }
     }
 
-    public static void PostServer(UnityServer server = null)
+    public static void PostServer(NetworkManager manager, UnityServer server = null)
     {
         var httpClient = new HttpClient();
 
@@ -59,7 +61,7 @@ public class ServerListService
         }
 
         MyServer.IpAddress = GetExternalIp();
-
+        MyServer.Port = manager.GetComponent<KcpTransport>().Port;
         ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
         var result = httpClient.PostAsync(ServerListUrl, new StringContent(JsonConvert.SerializeObject(server), Encoding.UTF8, "application/json")).ConfigureAwait(false).GetAwaiter().GetResult();
 
