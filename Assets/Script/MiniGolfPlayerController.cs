@@ -25,6 +25,14 @@ public class MiniGolfPlayerController : NetworkBehaviour
     {
         HazControl = false;
         SetInActiveColorOrOutlineOrWhatEver();
+        TellSrvYouAreDone();
+    }
+
+    [Command]
+    public void TellSrvYouAreDone()
+	{
+
+        MiniGolfGameController.Instance.PlayerPlayed(netId);
     }
 
     void CameraDotLookAtThis()
@@ -67,7 +75,6 @@ public class MiniGolfPlayerController : NetworkBehaviour
         {
             ApplyForce();
             GiefBackControl();
-            MiniGolfGameController.Instance.PlayerPlayed(netId);
         }
     }
 
@@ -94,4 +101,6 @@ public class MiniGolfPlayerController : NetworkBehaviour
         var direction = Ball.transform.position - GetMouseOffset();
         Ball.AddForce(direction * ImpulseMultiplier, ForceMode.VelocityChange);
 	}
+
+
 }

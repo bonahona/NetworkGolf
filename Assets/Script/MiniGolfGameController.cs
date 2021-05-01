@@ -44,14 +44,12 @@ public class MiniGolfGameController : NetworkBehaviour
         }
     }
 
-    [Command]
     public void PlayerPlayed(uint playerId)
 	{
         var prevPlayerIdx = players.Select((o, i) => new { o, i }).First(o => o.o.netId == playerId).i;
         activePlayer = (prevPlayerIdx + 1) % players.Count;
 
         players[activePlayer].CanHazControl();
-
     }
 
 }
