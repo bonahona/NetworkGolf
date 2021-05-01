@@ -52,11 +52,6 @@ public class MiniGolfPlayerController : NetworkBehaviour
         SetPlayerName(name);
     }
 
-    internal List<string> Select()
-    {
-        throw new System.NotImplementedException();
-    }
-
     private void Start()
     {
         if (isLocalPlayer) {
