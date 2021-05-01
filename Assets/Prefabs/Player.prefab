@@ -51,8 +51,10 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   HazControl: 0
+  StrikesLeft: 0
   Ball: {fileID: 0}
   ImpulseMultiplier: 0
+  SqrSlowDownVeloccity: 0
   ActiveMaterial: {fileID: 0}
   InactiveMaterial: {fileID: 0}
   Renderer: {fileID: 0}
@@ -186,7 +188,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!1 &4456258302199811109
 GameObject:
   m_ObjectHideFlags: 0
@@ -400,8 +402,10 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   HazControl: 0
+  StrikesLeft: 0
   Ball: {fileID: 136968313564592792}
   ImpulseMultiplier: 4
+  SqrSlowDownVeloccity: 50
   ActiveMaterial: {fileID: 2100000, guid: 8da4454f0fe134b46a6f93a2161ea7f5, type: 2}
   InactiveMaterial: {fileID: 2100000, guid: ba7801cedf8314940a912665f5f29caf, type: 2}
   Renderer: {fileID: 7237082903695278146}

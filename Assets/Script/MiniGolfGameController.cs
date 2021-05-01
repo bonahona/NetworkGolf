@@ -45,7 +45,11 @@ public class MiniGolfGameController : NetworkBehaviour
     }
 
     public void PlayerPlayed(uint playerId)
-	{
+    {
+        foreach(var player in players)
+        {
+            player.GiefBackControl();
+        }
         var prevPlayerIdx = players.Select((o, i) => new { o, i }).First(o => o.o.netId == playerId).i;
         activePlayer = (prevPlayerIdx + 1) % players.Count;
 
