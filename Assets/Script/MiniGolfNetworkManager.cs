@@ -37,4 +37,11 @@ public class MiniGolfNetworkManager : NetworkManager
 
         ServerListService.PostServer();
     }
+
+    public override void OnStopServer()
+    {
+        base.OnStopServer();
+
+        ServerListService.DeleteServer();
+    }
 }

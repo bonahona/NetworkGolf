@@ -12,7 +12,7 @@ using UnityEngine.Networking;
 public class ServerListService
 {
     public const string ExternalIpUrl = "https://api.ipify.org?format=json";
-    public const string ServerListUrl = "https://176.10.152.112:5001/server";
+    public const string ServerListUrl = "https://176.10.152.112:5001/server/";
 
     public static UnityServer MyServer = new UnityServer { ServerName = "This is a server" };
 
@@ -36,26 +36,6 @@ public class ServerListService
         }
     }
 
-    public static void PostServer(UnityServer server = null)
-    {
-        var httpClient = new HttpClient();
-
-        if (server == null) {
-            server = MyServer;
-        }
-
-        MyServer.IpAddress = GetExternalIp();
-
-        ServicePointManager.ServerCertificateValidationCallback +=(sender, cert, chain, sslPolicyErrors) => true;
-        var result = httpClient.PostAsync(ServerListUrl, new StringContent(JsonConvert.SerializeObject(server), Encoding.UTF8, "application/json")).ConfigureAwait(false).GetAwaiter().GetResult();
-
-        try {
-            MyServer = JsonConvert.DeserializeObject<UnityServer>(result.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult());
-        }catch(Exception e) {
-            Debug.LogWarning($"Failed to parse server response: {e.Message}");
-        }
-    }
-
     public static List<UnityServer> GetServerList()
     {
         var httpClient = new HttpClient();
@@ -68,5 +48,38 @@ public class ServerListService
             Debug.LogWarning($"Failed to parse server listing: {e.Message}");
             return new List<UnityServer>();
         }
+    }
+
+    public static void PostServer(UnityServer server = null)
+    {
+        var httpClient = new HttpClient();
+
+        if (server == null) {
+            server = MyServer;
+        }
+
+        MyServer.IpAddress = GetExternalIp();
+
+        ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+        var result = httpClient.PostAsync(ServerListUrl, new StringContent(JsonConvert.SerializeObject(server), Encoding.UTF8, "application/json")).ConfigureAwait(false).GetAwaiter().GetResult();
+
+        try {
+            MyServer = JsonConvert.DeserializeObject<UnityServer>(result.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult());
+        } catch (Exception e) {
+            Debug.LogWarning($"Failed to parse server response: {e.Message}");
+        }
+    }
+
+
+    public static void DeleteServer(UnityServer server = null)
+    {
+        var httpClient = new HttpClient();
+
+        if (server == null) {
+            server = MyServer;
+        }
+
+        ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+        var result = httpClient.DeleteAsync($"{ServerListUrl}{server.Id}").ConfigureAwait(false).GetAwaiter().GetResult();
     }
 }
