@@ -5,6 +5,7 @@ using Mirror;
 
 public class MiniGolfNetworkManager : NetworkManager
 {
+    public const string DefaultServerName = "A Server";
 
     [Header("Canvas UI")]
 
@@ -34,5 +35,6 @@ public class MiniGolfNetworkManager : NetworkManager
         DontDestroyOnLoad(_gameController);
         NetworkServer.Spawn(_gameController.gameObject);
 
+        ServerListService.PostServer();
     }
 }
