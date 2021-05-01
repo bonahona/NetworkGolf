@@ -21,19 +21,20 @@ public class ServerListService
         public string ip { get; set; }
     }
 
-    //private string GetExternalIp()
-    //{
-    //    var httpClient = new HttpClient();
+    private static string GetExternalIp()
+    {
+        var httpClient = new HttpClient();
 
-    //    ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-    //    var result = httpClient.GetAsync(ExternalIpUrl).ConfigureAwait(false).GetAwaiter().GetResult();
+        ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+        var result = httpClient.GetAsync(ExternalIpUrl).ConfigureAwait(false).GetAwaiter().GetResult();
 
-    //    try {
-    //        MyServer = JsonConvert.DeserializeObject<IpListing>(result.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult());
-    //    } catch (Exception e) {
-    //        Debug.LogWarning($"Failed to parse server response: {e.Message}");
-    //    }
-    //}
+        try {
+            return JsonConvert.DeserializeObject<IpListing>(result.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult()).ip;
+        } catch (Exception e) {
+            Debug.LogWarning($"Failed to parse server response: {e.Message}");
+            return "";
+        }
+    }
 
     public static void PostServer(UnityServer server = null)
     {
@@ -42,6 +43,8 @@ public class ServerListService
         if (server == null) {
             server = MyServer;
         }
+
+        MyServer.IpAddress = GetExternalIp();
 
         ServicePointManager.ServerCertificateValidationCallback +=(sender, cert, chain, sslPolicyErrors) => true;
         var result = httpClient.PostAsync(ServerListUrl, new StringContent(JsonConvert.SerializeObject(server), Encoding.UTF8, "application/json")).ConfigureAwait(false).GetAwaiter().GetResult();
