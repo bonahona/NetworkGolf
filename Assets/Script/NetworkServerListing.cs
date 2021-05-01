@@ -10,19 +10,28 @@ public class NetworkServerListing : MonoBehaviour
 
     public int offsetY;
 
+    public float UpdateTimeTimer = 15;
+
     private List<UnityServer> _foundServers = new List<UnityServer>();
     private NetworkManager manager;
+
+    private float timeToUpdate;
     // Start is called before the first frame update
     void Start()
     {
         manager = GetComponent<NetworkManager>();
-        _foundServers = ServerListService.GetServerList();   
+        _foundServers = ServerListService.GetServerList();
+        timeToUpdate = UpdateTimeTimer;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        timeToUpdate -= Time.deltaTime;
+        if(timeToUpdate <= 0) {
+            _foundServers = ServerListService.GetServerList();
+            timeToUpdate = UpdateTimeTimer;
+        }
     }
 
     private void OnGUI()
@@ -35,6 +44,11 @@ public class NetworkServerListing : MonoBehaviour
                 ConnectedToServer(server);
             }
         }
+
+        if (GUILayout.Button("Refresh")) {
+            _foundServers = ServerListService.GetServerList();
+        }
+
         GUILayout.EndArea();
     }
 
