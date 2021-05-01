@@ -51,5 +51,4 @@ public class MiniGolfGameController : NetworkBehaviour
 
         players[activePlayer].CanHazControl();
     }
-
 }
