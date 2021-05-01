@@ -14,6 +14,7 @@ public class LookAtObject : MonoBehaviour
     {
         if (!Target)
             return;
-        transform.rotation = Quaternion.LookRotation(Target.transform.position - transform.position, Vector3.up);
+        var targetRotation = Quaternion.LookRotation(Target.transform.position - transform.position, Vector3.up);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime);
     }
 }
