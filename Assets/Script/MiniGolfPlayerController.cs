@@ -14,6 +14,10 @@ public class MiniGolfPlayerController : NetworkBehaviour
     public Material InactiveMaterial;
     public Renderer Renderer;
 
+
+    [System.NonSerialized]
+    public string PlayerName = "Default name";
+
     [ClientRpc]
     public void CanHazControl()
     {
@@ -34,6 +38,30 @@ public class MiniGolfPlayerController : NetworkBehaviour
     public void TellSrvYouAreDone()
     {
         MiniGolfGameController.Instance.PlayerPlayed(netId);
+    }
+
+    [ClientRpc]
+    public void SetPlayerName(string name)
+    {
+        PlayerName = name;
+    }
+
+    [Command]
+    public void SrvSetPlayerName(string name)
+    {
+        SetPlayerName(name);
+    }
+
+    internal List<string> Select()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    private void Start()
+    {
+        if (isLocalPlayer) {
+            SrvSetPlayerName(MiniGolfNetworkManager.PlayerName);
+        }
     }
 
     void CameraDotLookAtThis()

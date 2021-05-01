@@ -5,6 +5,8 @@ using Mirror;
 
 public class MiniGolfNetworkManager : NetworkManager
 {
+    public static string PlayerName = "Name";
+
     [Header("Canvas UI")]
 
     [Tooltip("Assign Main Panel so it can be turned on from Player:OnStartClient")]

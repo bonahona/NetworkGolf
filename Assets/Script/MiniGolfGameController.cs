@@ -42,6 +42,8 @@ public class MiniGolfGameController : NetworkBehaviour
             activePlayer = 0;
             players[activePlayer].CanHazControl();
         }
+
+        ServerListService.MyServer.Users = players.Select(p => p.PlayerName).ToList();
     }
 
     public void PlayerPlayed(uint playerId)
