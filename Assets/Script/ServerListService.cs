@@ -74,6 +74,13 @@ public class ServerListService
         }
     }
 
+    public static async Task SilentUpdate()
+    {
+        var httpClient = new HttpClient();
+
+        ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+        await httpClient.PostAsync(ServerListUrl, new StringContent(JsonConvert.SerializeObject(MyServer), Encoding.UTF8, "application/json"));
+    }
 
     public static void DeleteServer(UnityServer server = null)
     {

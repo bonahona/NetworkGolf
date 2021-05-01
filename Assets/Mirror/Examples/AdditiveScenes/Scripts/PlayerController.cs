@@ -10,6 +10,8 @@ namespace Mirror.Examples.Additive
     {
         public CharacterController characterController;
 
+        private 
+
         void OnValidate()
         {
             if (characterController == null)

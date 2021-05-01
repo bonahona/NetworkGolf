@@ -15,7 +15,6 @@ public class MiniGolfNetworkManager : NetworkManager
     public MiniGolfGameController GameControllerPrefab;
     MiniGolfGameController _gameController;
 
-
     public override void OnServerAddPlayer(NetworkConnection conn)
     {
         Transform startPos = GetStartPosition();
@@ -33,6 +32,14 @@ public class MiniGolfNetworkManager : NetworkManager
         DontDestroyOnLoad(_gameController);
         NetworkServer.Spawn(_gameController.gameObject);
         ServerListService.PostServer(this);
+
+        CreateUpdateDispatcher();
+    }
+
+    private void CreateUpdateDispatcher()
+    {
+        var discoveryServerUpdatesGO = new GameObject("DiscoveryServerUpdates");
+        discoveryServerUpdatesGO.AddComponent<DiscoveryServerUpdates>();
     }
 
     public override void OnStopServer()
@@ -41,5 +48,4 @@ public class MiniGolfNetworkManager : NetworkManager
 
         ServerListService.DeleteServer();
     }
-
 }
