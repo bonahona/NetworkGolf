@@ -31,6 +31,7 @@ namespace Mirror
         /// </summary>
         public int offsetY;
 
+
         void Awake()
         {
             manager = GetComponent<NetworkManager>();
