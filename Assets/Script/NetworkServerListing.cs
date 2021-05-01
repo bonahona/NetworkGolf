@@ -10,7 +10,6 @@ public class NetworkServerListing : MonoBehaviour
 
     public int offsetY;
 
-
     private List<UnityServer> _foundServers = new List<UnityServer>();
     private NetworkManager manager;
     // Start is called before the first frame update
